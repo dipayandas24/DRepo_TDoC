@@ -80,6 +80,12 @@
   text-decoration: none;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .btn {
   margin-top: 20px;
   padding: 5px;
@@ -101,13 +107,6 @@
 }
 
 .right-content {
-  flex: 2;
+  flex: 1 1;
   margin-right: 100px;
-  // margin-left: 10%;
-  padding-left: 10%;
 }
-.img{
-  width: 800px;
-  height: auto;
-}
-

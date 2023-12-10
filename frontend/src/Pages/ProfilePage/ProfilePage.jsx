@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
-import './User2.scss';
+import './ProfilePage.scss';
 import ProfileCard from '../../Components/ProfileCard/ProfileCard';
 import RepoCard2 from '../../Components/RepoCard2/RepoCard2';
 import RepoCreation from '../../Components/RepoCreation/RepoCreation';
@@ -81,4 +81,4 @@ return (
   );
 };
 
-export default ProfilePage;
+export default ProfilePage;
