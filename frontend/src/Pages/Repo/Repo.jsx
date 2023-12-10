@@ -1,10 +1,14 @@
-import React, { useCallback } from "react";
-import Navbar from "../../Components/Navbar/Navbar";
-import "./Repo.scss";
-import { useDropzone } from "react-dropzone";
-import { useStorageUpload } from "@thirdweb-dev/react";
+import React, { useCallback } from 'react';
+import Navbar from '../../Components/Navbar/Navbar';
+import './Repo.scss';
+import { useDropzone } from 'react-dropzone';
+import { useStorageUpload } from '@thirdweb-dev/react';
+import { useParams } from 'react-router-dom';
 
 const Repo = () => {
+
+  const {profileName, repoName} = useParams();
+  console.log(profileName, repoName);
   const { mutateAsync: upload } = useStorageUpload();
 
   const onDrop = useCallback(
@@ -13,7 +17,7 @@ const Repo = () => {
         const uris = await upload({ data: acceptedFiles });
         console.log(uris);
       } catch (error) {
-        console.error("Error uploading to IPFS:", error);
+        console.error('Error uploading to IPFS:', error);
       }
     },
     [upload]
@@ -29,7 +33,7 @@ const Repo = () => {
       <div className="repo-container">
         <div className="repo-main">
           <div className="repo-header">
-            <h2>D-Hub_TDoC_Blockchain</h2>
+            <h2>{repoName}</h2>
             <div className="public-badge">Public</div>
           </div>
           <div className="branch-dropdown">
@@ -42,7 +46,7 @@ const Repo = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Rishav Raj Kumar</th>
+                  <th>{profileName}</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -71,10 +75,7 @@ const Repo = () => {
               <h3>README.md</h3>
             </div>
             <div className="readme-body">
-              <p>
-                This project is an implementation of a basic blockchain in
-                JavaScript.
-              </p>
+              <p>This project is an implementation of a basic blockchain in JavaScript.</p>
             </div>
           </div>
           <div {...getRootProps()} className="drag-drop-container">
@@ -85,10 +86,7 @@ const Repo = () => {
         <div className="repo-sidebar">
           <div className="about">
             <h3>About</h3>
-            <p>
-              This project is an implementation of a basic blockchain in
-              JavaScript.
-            </p>
+            <p>This project is an implementation of a basic blockchain in JavaScript.</p>
           </div>
         </div>
       </div>
