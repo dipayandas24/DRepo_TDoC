@@ -1,3 +1,7 @@
+@import './style.scss';
+*{
+  background-color: $bg;
+}
 .App {
     text-align: center;
   }
