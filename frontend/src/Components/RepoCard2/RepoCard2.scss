@@ -1,0 +1,56 @@
+@import "../../style.scss";
+
+.repo-card-2 {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    background-color: transparent;
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .repo-card-2-header {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .repo-card-2-name {
+    font-family: $font;
+    font-size: 25px;
+    color: $textNeon;
+    font-weight: bold;
+  }
+  
+  .repo-card-2-description {
+    margin-top: 10px;
+  }
+  
+  .repo-card-2-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .repo-card-2-stat {
+    font-family: $font;
+    font-size: 16px;
+    color: $textSoft;
+  }
+  
+  .repo-card-2-language {
+    margin-top: 10px;
+    align-items: flex-start;
+  }
+  
+  .repo-card-2-language-badge {
+    color: $textSoft;
+    font-family: $font;
+    font-size: 20px;
+  }
+  
+  hr {
+    border-top: 2px solid $textSoft;
+    margin-top: 20px;
+  }
+  
+  
