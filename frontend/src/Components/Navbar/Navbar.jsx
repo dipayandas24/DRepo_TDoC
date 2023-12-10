@@ -28,10 +28,10 @@ const Navbar = () => {
     <div className="navbar-container">
       <div className="navbar">
         <Link to="/" className="navbar-title">
-          D <span className="navbar-subtitle">-Hub</span>
+          D<span className="navbar-subtitle">Repo</span>
         </Link>
 
-        {isUserPage && (
+        {/* {isUserPage && (
           <>
             <div className="toggle-buttons">
               <button className="overview" onClick={toggleOverview}>Overview</button>
@@ -47,7 +47,7 @@ const Navbar = () => {
               )}
             </div>
           </>
-        )}
+        )} */}
 
         <div className="search-bar">
           <input
