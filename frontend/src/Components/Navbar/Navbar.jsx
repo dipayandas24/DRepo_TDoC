@@ -12,15 +12,15 @@ const Navbar = () => {
     setRepositoriesVisible(false);
   }, [location]);
 
-  const toggleOverview = () => {
-    setOverviewVisible(!overviewVisible);
-    setRepositoriesVisible(false);
-  };
+  // const toggleOverview = () => {
+  //   setOverviewVisible(!overviewVisible);
+  //   setRepositoriesVisible(false);
+  // };
 
-  const toggleRepositories = () => {
-    setRepositoriesVisible(!repositoriesVisible);
-    setOverviewVisible(false);
-  };
+  // const toggleRepositories = () => {
+  //   setRepositoriesVisible(!repositoriesVisible);
+  //   setOverviewVisible(false);
+  // };
 
   const isUserPage = location.pathname === "/user";
 

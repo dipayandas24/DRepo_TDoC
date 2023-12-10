@@ -25,6 +25,7 @@
     "stream": "^0.0.2",
     "url": "latest",
     "web-vitals": "^3.1.0",
+    "web3": "^4.3.0",
     "zlib": "npm:browserify-zlib"
   },
   "scripts": {
@@ -51,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.6"
   }
 }
