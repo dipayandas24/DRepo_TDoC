@@ -20,6 +20,7 @@ $font: 'Poppins', sans-serif;
 .navbar {
   display: flex;
   justify-content: space-between;
+  background-color: $bgSoft;
 //   align-items: center; 
   width: 100%;
   max-width: $navbar-max-width;
@@ -31,15 +32,18 @@ $font: 'Poppins', sans-serif;
 .navbar-subtitle {
   font-size: 40px;
   font-family: $font;
+  background-color: $bgSoft;
   font-weight: bold;
 }
 
 .navbar-title { 
   color: $textNeon;
+  background-color: $bgSoft;
 }
 
 .navbar-subtitle {
   color: $textBasic;
+  background-color: $bgSoft;
 }
 
 .search-bar {
@@ -47,6 +51,7 @@ $font: 'Poppins', sans-serif;
   align-items: center;
   color: $textBasic;
   margin-right: -150px;
+  background-color: $bgSoft;
 }
 
 .search-field {
@@ -61,3 +66,18 @@ $font: 'Poppins', sans-serif;
   font-weight: 20px;;
 }
 
+.toggle-buttons{
+  background: none;
+  align-items: baseline;
+}
+
+.overview,
+.repositories{
+  background: none;
+  align-items: baseline;
+}
+
+.overview:hover, .repositories:hover{
+  background: none;
+  text-decoration: underline $textNeon 4px;
+}

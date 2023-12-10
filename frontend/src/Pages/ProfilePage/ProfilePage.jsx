@@ -13,6 +13,7 @@ const ProfilePage = () => {
 //   const {profileName} = useParams();
 //   const [isModalOpen, setModalOpen] = useState(false);
 //   const [repositories, setRepositories] = useState([]);
+const [repo, setRepo] = useState([]);
 
   
 
@@ -36,6 +37,15 @@ const ProfilePage = () => {
 //   }
 //   fetchRepositories();
 // })
+
+// useEffect(() =>{
+//   const fetchRepo = async () => {
+//     const {data} = await getAllRepos();
+//     setRepo(data);
+//   }
+//   fetchRepo();
+// },[]);
+
   return (
     <div>
       <Navbar />
@@ -45,7 +55,7 @@ const ProfilePage = () => {
             <div className="repo-area">
                 <div className="search-and-button-container">
                     <div className="reposearch-container">
-                    <input type="text" placeholder="Find a Repository" className="reposearch-bar" />
+                      <input type="text" placeholder="Find a Repository" className="reposearch-bar" />
                     </div>
                     <div>
                     {/* <button className="button" onClick={() => setModalOpen(true) }>New</button> */}

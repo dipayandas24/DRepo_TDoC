@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.scss";
 
 const Navbar = () => {
@@ -22,7 +22,7 @@ const Navbar = () => {
     setOverviewVisible(false);
   };
 
-  const isUserPage = location.pathname === '/user';
+  const isUserPage = location.pathname === "/user";
 
   return (
     <div className="navbar-container">
@@ -34,13 +34,17 @@ const Navbar = () => {
         {isUserPage && (
           <>
             <div className="toggle-buttons">
-              <button onClick={toggleOverview}>Overview</button>
-              <button onClick={toggleRepositories}>Repositories</button>
+              <button className="overview" onClick={toggleOverview}>Overview</button>
+              <button className="repositories" onClick={toggleRepositories}>Repositories</button>
             </div>
 
             <div className="panels">
-              {overviewVisible && <div className="overview-panel">Overview Content</div>}
-              {repositoriesVisible && <div className="repositories-panel">Repositories Content</div>}
+              {overviewVisible && (
+                <div className="overview-panel">Overview Content</div>
+              )}
+              {repositoriesVisible && (
+                <div className="repositories-panel">Repositories Content</div>
+              )}
             </div>
           </>
         )}

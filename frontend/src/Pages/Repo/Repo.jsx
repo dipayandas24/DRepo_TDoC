@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
-import Navbar from '../../Components/Navbar/Navbar';
-import './Repo.scss';
-import { useDropzone } from 'react-dropzone';
-import { useStorageUpload } from '@thirdweb-dev/react';
-
+import React, { useCallback } from "react";
+import Navbar from "../../Components/Navbar/Navbar";
+import "./Repo.scss";
+import { useDropzone } from "react-dropzone";
+import { useStorageUpload } from "@thirdweb-dev/react";
 
 const Repo = () => {
   const { mutateAsync: upload } = useStorageUpload();
@@ -14,7 +13,7 @@ const Repo = () => {
         const uris = await upload({ data: acceptedFiles });
         console.log(uris);
       } catch (error) {
-        console.error('Error uploading to IPFS:', error);
+        console.error("Error uploading to IPFS:", error);
       }
     },
     [upload]
@@ -72,7 +71,10 @@ const Repo = () => {
               <h3>README.md</h3>
             </div>
             <div className="readme-body">
-              <p>This project is an implementation of a basic blockchain in JavaScript.</p>
+              <p>
+                This project is an implementation of a basic blockchain in
+                JavaScript.
+              </p>
             </div>
           </div>
           <div {...getRootProps()} className="drag-drop-container">
@@ -83,7 +85,10 @@ const Repo = () => {
         <div className="repo-sidebar">
           <div className="about">
             <h3>About</h3>
-            <p>This project is an implementation of a basic blockchain in JavaScript.</p>
+            <p>
+              This project is an implementation of a basic blockchain in
+              JavaScript.
+            </p>
           </div>
         </div>
       </div>
