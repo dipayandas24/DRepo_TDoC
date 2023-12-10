@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         {/* <Route path="/user1" element={<User1 />} /> */}
         <Route path="/:profileName" element={<ProfilePage />} />
-        <Route path="/repo" element={<Repo />} />
+        <Route path="/:profileName/:repoName" element={<Repo />} />
       </Routes>
     </Router>
   );

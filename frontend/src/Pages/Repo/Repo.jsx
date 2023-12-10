@@ -3,9 +3,12 @@ import Navbar from '../../Components/Navbar/Navbar';
 import './Repo.scss';
 import { useDropzone } from 'react-dropzone';
 import { useStorageUpload } from '@thirdweb-dev/react';
-
+import { useParams } from 'react-router-dom';
 
 const Repo = () => {
+
+  const {profileName, repoName} = useParams();
+  console.log(profileName, repoName);
   const { mutateAsync: upload } = useStorageUpload();
 
   const onDrop = useCallback(
@@ -30,7 +33,7 @@ const Repo = () => {
       <div className="repo-container">
         <div className="repo-main">
           <div className="repo-header">
-            <h2>D-Hub_TDoC_Blockchain</h2>
+            <h2>{repoName}</h2>
             <div className="public-badge">Public</div>
           </div>
           <div className="branch-dropdown">
@@ -43,7 +46,7 @@ const Repo = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Rishav Raj Kumar</th>
+                  <th>{profileName}</th>
                   <th></th>
                   <th></th>
                 </tr>

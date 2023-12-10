@@ -1,8 +1,10 @@
 import React from 'react';
 import './RepoCard2.scss';
+import { Link } from 'react-router-dom';
 
-const RepoCard2 = ({ repoName }) => {
+const RepoCard2 = ({profileName, repoName }) => {
   return (
+    <Link to = {`/${profileName}/${repoName}`}style={{ textDecoration: 'none', color: 'inherit' }}>
     <div className="repo-card-2">
       <div className="repo-card-2-header">
         <h3 className="repo-card-2-name">{repoName}</h3>
@@ -16,6 +18,7 @@ const RepoCard2 = ({ repoName }) => {
       </div>
       <hr />
     </div>
+    </Link>
   );
 };
 
