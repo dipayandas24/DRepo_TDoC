@@ -43,6 +43,46 @@ const Repo = () => {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
   });
+  
+  // const onDrop = useCallback(
+  //   async (acceptedFiles) => {
+  //     try {
+  //       const files = [];
+
+  //       const addFilesInDirectory = async (dirPath, prefix = '') => {
+  //         const entries = await dirPath.getAllEntries();
+  //         const files = [];
+
+  //         for await (const entry of entries) {
+  //           if (entry.isFile) {
+  //             const file = await entry.getFile();
+  //             files.push({ content: file, path: `${prefix}${entry.name}` });
+  //           } else if (entry.isDirectory) {
+  //             files.push(...await addFilesInDirectory(entry.createReader(), `${prefix}${entry.name}/`));
+  //           }
+  //         }
+
+  //         return files;
+  //       };
+
+  //       for (const fileOrDirectory of acceptedFiles) {
+  //         if (fileOrDirectory instanceof File) {
+  //           files.push({ content: fileOrDirectory, path: fileOrDirectory.name });
+  //         } else if (fileOrDirectory instanceof Blob) {
+  //           files.push(...await addFilesInDirectory(fileOrDirectory));
+  //         } else {
+  //           throw new Error("Unsupported upload type");
+  //         }
+  //       }
+
+  //       const uris = await upload({ data: files });
+  //       console.log(uris);
+  //     } catch (error) {
+  //       console.error('Error uploading to IPFS:', error);
+  //     }
+  //   },
+  //   [upload]
+  // );
 
   return (
     <div>
