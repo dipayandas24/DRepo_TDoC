@@ -80,7 +80,7 @@ const Home = () => {
           <div className="signin-text">Already Have an Account, <button className='sign-in' onClick={handleSignIn}>Sign In</button></div>
         </div>
         <div className="right-content">
-          <img className='w-800 h-auto' src="hero.jpg" alt="hero" />
+          <img className='img' src="hero.jpg" alt="hero" />
         </div>
       </div>
     </div>
