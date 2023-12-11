@@ -2,22 +2,34 @@ import React, { useCallback } from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
 import './Repo.scss';
 import { useDropzone } from 'react-dropzone';
+import { useStorage } from "@thirdweb-dev/react"
 import { useStorageUpload } from '@thirdweb-dev/react';
 import { useParams } from 'react-router-dom';
 
+
+
 const Repo = () => {
 
+  const storage = useStorage();
+  const [url,setUrl] = React.useState('');
   const {profileName, repoName} = useParams();
-  console.log(profileName, repoName);
+  
   const { mutateAsync: upload } = useStorageUpload();
+  
+    
 
   const onDrop = useCallback(
     async (acceptedFiles) => {
       try {
-        const uris = await upload({ data: acceptedFiles });
-        console.log(uris);
+        const uri = await upload({ data: acceptedFiles });
+        console.log(typeof uri[0]);
+        const data = await storage.download(uri[0]);
+        console.log(data.url);
+        setUrl(data.url)
+        
       } catch (error) {
         console.error('Error uploading to IPFS:', error);
+        
       }
     },
     [upload]
@@ -27,45 +39,7 @@ const Repo = () => {
     onDrop,
   });
   
-  // const onDrop = useCallback(
-  //   async (acceptedFiles) => {
-  //     try {
-  //       const files = [];
-
-  //       const addFilesInDirectory = async (dirPath, prefix = '') => {
-  //         const entries = await dirPath.getAllEntries();
-  //         const files = [];
-
-  //         for await (const entry of entries) {
-  //           if (entry.isFile) {
-  //             const file = await entry.getFile();
-  //             files.push({ content: file, path: `${prefix}${entry.name}` });
-  //           } else if (entry.isDirectory) {
-  //             files.push(...await addFilesInDirectory(entry.createReader(), `${prefix}${entry.name}/`));
-  //           }
-  //         }
-
-  //         return files;
-  //       };
-
-  //       for (const fileOrDirectory of acceptedFiles) {
-  //         if (fileOrDirectory instanceof File) {
-  //           files.push({ content: fileOrDirectory, path: fileOrDirectory.name });
-  //         } else if (fileOrDirectory instanceof Blob) {
-  //           files.push(...await addFilesInDirectory(fileOrDirectory));
-  //         } else {
-  //           throw new Error("Unsupported upload type");
-  //         }
-  //       }
-
-  //       const uris = await upload({ data: files });
-  //       console.log(uris);
-  //     } catch (error) {
-  //       console.error('Error uploading to IPFS:', error);
-  //     }
-  //   },
-  //   [upload]
-  // );
+  
 
   return (
     <div>
@@ -115,7 +89,7 @@ const Repo = () => {
               <h3>README.md</h3>
             </div>
             <div className="readme-body">
-              <p>This project is an implementation of a basic blockchain in JavaScript.</p>
+              
             </div>
           </div>
           <div {...getRootProps()} className="drag-drop-container">
@@ -126,7 +100,8 @@ const Repo = () => {
         <div className="repo-sidebar">
           <div className="about">
             <h3>About</h3>
-            <p>This project is an implementation of a basic blockchain in JavaScript.</p>
+            <a href={url} download="abc.sol">Download link</a>
+
           </div>
         </div>
       </div>
@@ -134,4 +109,47 @@ const Repo = () => {
   );
 };
 
+
+
+
 export default Repo;
+
+// const onDrop = useCallback(
+  //   async (acceptedFiles) => {
+  //     try {
+  //       const files = [];
+
+  //       const addFilesInDirectory = async (dirPath, prefix = '') => {
+  //         const entries = await dirPath.getAllEntries();
+  //         const files = [];
+
+  //         for await (const entry of entries) {
+  //           if (entry.isFile) {
+  //             const file = await entry.getFile();
+  //             files.push({ content: file, path: `${prefix}${entry.name}` });
+  //           } else if (entry.isDirectory) {
+  //             files.push(...await addFilesInDirectory(entry.createReader(), `${prefix}${entry.name}/`));
+  //           }
+  //         }
+
+  //         return files;
+  //       };
+
+  //       for (const fileOrDirectory of acceptedFiles) {
+  //         if (fileOrDirectory instanceof File) {
+  //           files.push({ content: fileOrDirectory, path: fileOrDirectory.name });
+  //         } else if (fileOrDirectory instanceof Blob) {
+  //           files.push(...await addFilesInDirectory(fileOrDirectory));
+  //         } else {
+  //           throw new Error("Unsupported upload type");
+  //         }
+  //       }
+
+  //       const uris = await upload({ data: files });
+  //       console.log(uris);
+  //     } catch (error) {
+  //       console.error('Error uploading to IPFS:', error);
+  //     }
+  //   },
+  //   [upload]
+  // );

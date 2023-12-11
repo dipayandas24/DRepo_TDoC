@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Home = () => {
+  
 
   const navigate = useNavigate()
  
@@ -40,6 +41,7 @@ const Home = () => {
   }
 }
 }
+
 
   const registerUser = async () => {
 
