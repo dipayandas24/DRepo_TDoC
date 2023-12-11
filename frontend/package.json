@@ -10,12 +10,14 @@
     "@thirdweb-dev/react": "^4",
     "@thirdweb-dev/sdk": "^4",
     "assert": "^2.0.0",
+    "autoprefixer": "^10.4.16",
     "browserify-zlib": "latest",
     "ethers": "^5",
     "http": "npm:http-browserify",
     "http-browserify": "latest",
     "https": "npm:https-browserify",
     "https-browserify": "latest",
+    "postcss": "^8.4.32",
     "react": "^18.2",
     "react-dom": "^18.2",
     "react-dropzone": "^14.2.3",
@@ -52,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.6"
   }
 }

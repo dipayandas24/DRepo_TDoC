@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './Pages/Home/Home';
 import Repo from './Pages/Repo/Repo';
 import ProfilePage from './Pages/ProfilePage/ProfilePage';
+import Commit from './Pages/Commit/Commit'
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         {/* <Route path="/user1" element={<User1 />} /> */}
         <Route path="/:profileName" element={<ProfilePage />} />
         <Route path="/:profileName/:repoName" element={<Repo />} />
+        <Route path="/:profileName/:repoName/:commit" element={<Commit />} />
       </Routes>
     </Router>
   );

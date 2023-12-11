@@ -14,6 +14,16 @@ const Home = () => {
 
   const [profileName, setProfileName] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    // Perform actions for file upload
+    console.log("Your commit:", inputValue);
+  };
 
   const registerUser = async () => {
 
