@@ -11,10 +11,14 @@ $font: 'Poppins', sans-serif;
 .navbar-container {
   background-color: $bgSoft;
   height: $navbar-height;
+  color: #FFFFFF;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: $navbar-padding;
+  // width: 100%;
+  // margin: 0;
+  // padding: 0;
 }
 
 .navbar {

@@ -2,6 +2,7 @@
 
 .repo-container {
   display: flex;
+  justify-content: space-between;
   margin-top: 20px;
 }
 
@@ -38,7 +39,15 @@
 .branch-dropdown {
   margin-bottom: 10px;
   font-family: $font;
-  font-size: 20px;
+
+  color: white;
+  font-size: 30px;
+}
+
+.dropdown {
+  font-family: $font;
+  font-weight: 500;
+  background: #fff;
 }
 
 .files-list {
@@ -88,6 +97,7 @@
 
     h3 {
       margin-bottom: 0;
+      background-color: $bgSoft;
       font-size: 24px;
       color: $textBasic;
     }
@@ -99,17 +109,24 @@
 
     p {
       font-family: $font;
+      background-color: $bgSoft;
       font-size: 18px;
       color: $textSoft;
     }
   }
 }
 
+.drag-drop{
+  color: #000000;
+}
+
 .drag-drop-container {
   width: 60%;
   height: 40%;
   margin-top: 20px;
+  // margin-bottom: 200px;
   padding: 20px;
+  color: #000000;
   border: 2px solid $textSoft;
   border-radius: 20px;
   display: flex;
@@ -134,13 +151,14 @@
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: mix($textNeon, $bg, 10%);
+      background-color: mix($textNeon, $bg, 100%);
     }
   }
 }
 
 .repo-sidebar {
-  width: 300px;
+  width: 400px;
+  margin-left: -40px ;
 }
 
 .about {
@@ -158,4 +176,13 @@
   padding-right: 200px;
   font-family: $font;
   margin-left: 0;
+}
+
+.commit-massege{
+  width: 60%;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-left: 15px;
+  color: #fff;
+  padding-bottom: 10px;
 }
