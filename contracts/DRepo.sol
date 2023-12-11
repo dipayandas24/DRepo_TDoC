@@ -6,15 +6,13 @@ contract DRepo {
     mapping(address => bool) public isRegistered;
     mapping(string => address) public profileNameMap;
     mapping(string => address) public projectNameToAddress;
+    mapping(address => string) public profileNameToAddr;
 
     struct Commit {
         string CommitMsg;
-        string ipfsCID;
+        string ipfsURI;
     }
 
-    function getAddressByProfileName(string memory profileName) public view returns (address) {
-        return profileNameMap[profileName];
-    }
 
     mapping(address => string[]) public userProjects;
     mapping(string => Commit[]) public projectCommits;
@@ -28,12 +26,16 @@ contract DRepo {
         isRegistered[msg.sender] = true;
 
         profileNameMap[profileName] = msg.sender;
-
+        profileNameToAddr[msg.sender] = profileName;
         
     }
 
     function authenticateUser() public view returns (bool) {
         return isRegistered[msg.sender];
+    }
+
+    function getProfileName() public view returns (string memory) {
+        return profileNameToAddr[msg.sender];
     }
 
     function CreateProject(string memory project_name) public  {
@@ -59,9 +61,9 @@ contract DRepo {
     function commit(
         string memory project_name,
         string memory commitMsg,
-        string memory ipfsCID
+        string memory ipfsURI
     ) public projectOwner(project_name) {
-        projectCommits[project_name].push(Commit(commitMsg, ipfsCID));
+        projectCommits[project_name].push(Commit(commitMsg, ipfsURI));
     }
 
     function getAllCommits(string memory project_name)

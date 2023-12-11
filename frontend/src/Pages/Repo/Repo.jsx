@@ -1,14 +1,46 @@
-import React, { useCallback, useState } from "react";
-import Navbar from "../../Components/Navbar/Navbar";
-import "./Repo.scss";
-import { useDropzone } from "react-dropzone";
-import { useStorageUpload } from "@thirdweb-dev/react";
-import { useParams } from "react-router-dom";
+import React, { useCallback, useState } from 'react';
+import Navbar from '../../Components/Navbar/Navbar';
+import './Repo.scss';
+import { useDropzone } from 'react-dropzone';
+import { useStorage } from "@thirdweb-dev/react"
+import { useStorageUpload } from '@thirdweb-dev/react';
+import { useParams } from 'react-router-dom';
+
+
 
 const Repo = () => {
-  const { profileName, repoName } = useParams();
-  console.log(profileName, repoName);
+
+  const storage = useStorage();
+  const [url,setUrl] = React.useState('');
+  const {profileName, repoName} = useParams();
+  
   const { mutateAsync: upload } = useStorageUpload();
+  
+    
+
+  const onDrop = useCallback(
+    async (acceptedFiles) => {
+      try {
+        const uri = await upload({ data: acceptedFiles });
+        console.log(typeof uri[0]);
+        const data = await storage.download(uri[0]);
+        console.log(data.url);
+        setUrl(data.url)
+        
+      } catch (error) {
+        console.error('Error uploading to IPFS:', error);
+        
+      }
+    },
+    [upload]
+  );
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+  });
+  
+  
+  console.log(profileName, repoName);
   const [fileUrl, setFileUrl] = useState("");
   const [inputValue, setInputValue] = useState("");
 
@@ -28,22 +60,6 @@ const Repo = () => {
     setFileUrl(URL.createObjectURL(file));
   };
 
-  const onDrop = useCallback(
-    async (acceptedFiles) => {
-      try {
-        const uris = await upload({ data: acceptedFiles });
-        console.log(uris);
-      } catch (error) {
-        console.error("Error uploading to IPFS:", error);
-      }
-    },
-    [upload]
-  );
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-  });
-  
   // const onDrop = useCallback(
   //   async (acceptedFiles) => {
   //     try {
