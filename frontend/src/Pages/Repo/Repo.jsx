@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { useStorage } from "@thirdweb-dev/react"
 import { useStorageUpload } from '@thirdweb-dev/react';
 import { useParams } from 'react-router-dom';
+import JSZip from 'jszip';
 
 
 
@@ -21,19 +22,68 @@ const Repo = () => {
   const onDrop = useCallback(
     async (acceptedFiles) => {
       try {
-        const uri = await upload({ data: acceptedFiles });
-        console.log(typeof uri[0]);
-        const data = await storage.download(uri[0]);
-        console.log(data.url);
-        setUrl(data.url)
+        const files = [];
+        const zip = new JSZip();
         
+        // for (const fileOrDirectory of acceptedFiles) {
+        //   console.log('directory check', fileOrDirectory);
+        //   if (fileOrDirectory.path.includes("/")) {
+            
+            
+
+            
+        //     const directoryName = fileOrDirectory.name;
+
+        //     // const addFilesInDirectory = async (dirPath, prefix = '') => {
+        //     //   const entries = await dirPath.getAllEntries();
+
+        //     //   for await (const entry of entries) {
+        //     //     if (entry.isFile) {
+        //     //       const file = await entry.getFile();
+        //     //       zip.file(`${prefix}${entry.name}`, file);
+        //     //     } else if (entry.isDirectory) {
+        //     //       await addFilesInDirectory(entry.createReader(), `${prefix}${entry.name}/`);
+        //     //     }
+        //     //   }
+        //     // };
+
+        //     await addFilesInDirectory(fileOrDirectory.createReader());
+
+        //     const zippedBlob = await zip.generateAsync({ type: 'blob' });
+
+            
+        //     console.log('Zipped Blob Content:', zippedBlob);
+
+            
+        //     files.push({ content: zippedBlob, path: `${directoryName}.zip` });
+        //   } else {
+        //     const file = await fileOrDirectory.getFile();
+        //     files.push({ content: file, path: file.name });
+        //   }
+        // }
+        
+        for (const fileOrDirectory of acceptedFiles) {
+            console.log('directory check', fileOrDirectory);
+          zip.file(fileOrDirectory.path, "string")
+        }  
+
+        const RequiredZip = await zip.generateAsync({type: "blob"})
+        const FileToBeUploaded = new File([RequiredZip], "NewFile")
+        
+        
+        console.log('Zipped here', FileToBeUploaded);
+
+        
+        const uris = await storage.upload(FileToBeUploaded);
+        console.log('IPFS Upload Result:', uris);
       } catch (error) {
         console.error('Error uploading to IPFS:', error);
-        
       }
     },
     [upload]
   );
+
+  
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -190,3 +240,46 @@ const Repo = () => {
 };
 
 export default Repo;
+
+
+
+
+// const onDrop = useCallback(
+  //   async (acceptedFiles) => {
+  //     try {
+  //       const files = [];
+
+  //       const addFilesInDirectory = async (dirPath, prefix = '') => {
+  //         const entries = await dirPath.getAllEntries();
+  //         const files = [];
+
+  //         for await (const entry of entries) {
+  //           if (entry.isFile) {
+  //             const file = await entry.getFile();
+  //             files.push({ content: file, path: `${prefix}${entry.name}` });
+  //           } else if (entry.isDirectory) {
+  //             files.push(...await addFilesInDirectory(entry.createReader(), `${prefix}${entry.name}/`));
+  //           }
+  //         }
+
+  //         return files;
+  //       };
+
+  //       for (const fileOrDirectory of acceptedFiles) {
+  //         if (fileOrDirectory instanceof File) {
+  //           files.push({ content: fileOrDirectory, path: fileOrDirectory.name });
+  //         } else if (fileOrDirectory instanceof Blob) {
+  //           files.push(...await addFilesInDirectory(fileOrDirectory));
+  //         } else {
+  //           throw new Error("Unsupported upload type");
+  //         }
+  //       }
+
+  //       const uris = await upload({ data: files });
+  //       console.log(uris);
+  //     } catch (error) {
+  //       console.error('Error uploading to IPFS:', error);
+  //     }
+  //   },
+  //   [upload]
+  // );
