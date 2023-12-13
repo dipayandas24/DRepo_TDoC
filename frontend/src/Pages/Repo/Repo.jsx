@@ -1,104 +1,162 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
 import './Repo.scss';
-import { useDropzone } from 'react-dropzone';
 import { useStorage } from "@thirdweb-dev/react"
-import { useStorageUpload } from '@thirdweb-dev/react';
 import { useParams } from 'react-router-dom';
-
-
+import JSZip from 'jszip';
+import { Link } from 'react-router-dom';
+import Web3 from 'web3';
+import { contractABI, contractAddress } from '../../contractConfig.js';
 
 const Repo = () => {
 
-  const storage = useStorage();
-  const [url,setUrl] = React.useState('');
-  const {profileName, repoName} = useParams();
-  
-  const { mutateAsync: upload } = useStorageUpload();
-  
-    
 
-  const onDrop = useCallback(
-    async (acceptedFiles) => {
-      try {
-        const uri = await upload({ data: acceptedFiles });
-        console.log(typeof uri[0]);
-        const data = await storage.download(uri[0]);
-        console.log(data.url);
-        setUrl(data.url)
-        
-      } catch (error) {
-        console.error('Error uploading to IPFS:', error);
-        
-      }
-    },
-    [upload]
-  );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-  });
-  
-  
-  console.log(profileName, repoName);
-  const [fileUrl, setFileUrl] = useState("");
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const [commit, setLastCommit] = useState([]);
+  const { profileName, repoName } = useParams();
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [ipfspath, setipfsPath] = useState([]);
+  const [path, setPath] = useState([]);
+  const [url, setDownloadUrl] = useState("");
+
+
+  const fetchCommits = async () => {
+    if (window.ethereum) {
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+      try {
+        await window.eth_requestAccounts;
+        const accounts = await web3.eth.getAccounts();
+        const commits = await contract.methods.getAllCommits(repoName).call({ from: accounts[0] });
+
+        const latestCommit = commits.length > 0 ? commits[commits.length - 1] : null;
+        setLastCommit(latestCommit.CommitMsg);
+        console.log(latestCommit.ipfsURI)
+
+        if (latestCommit) {
+          const response = await fetch(latestCommit.ipfsURI)
+          console.log(response)
+          const { data,fs } = await response.json();
+          console.log(data);
+
+          const formattedUrl = data.replace('ipfs://', 'https://ipfs.io/ipfs/');
+          console.log(formattedUrl);
+
+          setDownloadUrl(formattedUrl)
+
+          const commitPaths = fs.map((file) => {
+            const pathComponents = file.path.split('/');
+            return pathComponents.length > 2 ? pathComponents[1] : file.path;
+          });
+          const uniquePaths = [...new Set(commitPaths)];
+          console.log(Array.isArray(uniquePaths));
+          
+          setPath(uniquePaths);
+        }
+
+
+      } catch (error) {
+        console.error('Error fetching commits from smart contract:', error);
+      }
+    }
+  }
+
+  const storage = useStorage();
+  const fileInputRef = useRef(null);
+
+
+
+  const handleFileChange = (event) => {
+    const fileList = event.target.files;
+    const files = [];
+    const webkitdirectory = []
+
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList[i];
+
+      files.push((file));
+      webkitdirectory.push((file.webkitRelativePath));
+
+    }
+
+    console.log(files);
+
+    setipfsPath(webkitdirectory)
+    setSelectedFiles(files);
+  };
+
+  useEffect(() => {
+    fetchCommits();
+    console.log(typeof path)
+  }, []);
+
+
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
+  }
+
+  const handleSubmit = async () => {
+
+    const zip = new JSZip();
+    for (const file of selectedFiles) {
+      const path = file.webkitRelativePath;
+      const content = await readFileAsync(file);
+      const pathComponents = path.split('/');
+      let currentFolder = zip;
+      for (let i = 0; i < pathComponents.length - 1; i++) {
+        const folderName = pathComponents[i];
+        currentFolder = currentFolder.folder(folderName);
+      }
+      currentFolder.file(pathComponents[pathComponents.length - 1], content);
+
+    }
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const zipFile = new File([zipBlob], 'files.zip');
+    const uri = await storage.upload({
+      data: zipFile,
+      fs: ipfspath.map((filePath, index) => ({
+        name: `file${index + 1}`,
+        path: filePath,
+      })),
+    });
+    console.log(uri)
+    const data = await storage.download(uri);
+
+    console.log(data.url);
+
+    if (window.ethereum) {
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(contractABI, contractAddress);
+      try {
+        await window.eth_requestAccounts;
+        const accounts = await web3.eth.getAccounts();
+        await contract.methods.commit(repoName, inputValue, data.url).send({ from: accounts[0] });
+
+      }
+      catch (error) {
+        console.error('Error adding commit', error);
+      }
+    }
+
   };
 
-  const handleSubmit = () => {
-    // Perform actions for file upload
-    console.log("Your commit:", inputValue);
+  const readFileAsync = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsArrayBuffer(file);
+
+    })
   };
-
-  const handleFileDrop = async (e) => {
-    e.preventDefault();
-    const fileHandle = await window.showOpenFilePicker();
-    const file = await fileHandle[0].getFile();
-    setFileUrl(URL.createObjectURL(file));
-  };
-
-  // const onDrop = useCallback(
-  //   async (acceptedFiles) => {
-  //     try {
-  //       const files = [];
-
-  //       const addFilesInDirectory = async (dirPath, prefix = '') => {
-  //         const entries = await dirPath.getAllEntries();
-  //         const files = [];
-
-  //         for await (const entry of entries) {
-  //           if (entry.isFile) {
-  //             const file = await entry.getFile();
-  //             files.push({ content: file, path: `${prefix}${entry.name}` });
-  //           } else if (entry.isDirectory) {
-  //             files.push(...await addFilesInDirectory(entry.createReader(), `${prefix}${entry.name}/`));
-  //           }
-  //         }
-
-  //         return files;
-  //       };
-
-  //       for (const fileOrDirectory of acceptedFiles) {
-  //         if (fileOrDirectory instanceof File) {
-  //           files.push({ content: fileOrDirectory, path: fileOrDirectory.name });
-  //         } else if (fileOrDirectory instanceof Blob) {
-  //           files.push(...await addFilesInDirectory(fileOrDirectory));
-  //         } else {
-  //           throw new Error("Unsupported upload type");
-  //         }
-  //       }
-
-  //       const uris = await upload({ data: files });
-  //       console.log(uris);
-  //     } catch (error) {
-  //       console.error('Error uploading to IPFS:', error);
-  //     }
-  //   },
-  //   [upload]
-  // );
 
   return (
     <div>
@@ -110,10 +168,26 @@ const Repo = () => {
             <div className="public-badge">Public</div>
           </div>
           <div className="branch-dropdown">
-            <select className="dropdown">
-              <option value="main">Main</option>
-              <option value="master">Master</option>
-            </select>
+            <div className="branch">
+              <select className="dropdown">
+                <option value="main">Main</option>
+                <option value="master">Master</option>
+              </select>
+            </div>
+            <div className="Code">
+              <button className="code-btn" onClick={handleDropdownToggle}>
+
+                Code
+              </button>
+              {isDropdownOpen && (
+                <div className="download">
+                  <a href= {url} className="zip">
+                    Download ZIP
+                  </a>
+                  {/* Add more dropdown items if needed */}
+                </div>
+              )}
+            </div>
           </div>
           <div className="files-list">
             <table>
@@ -121,72 +195,98 @@ const Repo = () => {
                 <tr>
                   <th>{profileName}</th>
                   <th></th>
-                  <th></th>
+                  <th><Link to={`/${profileName}/${repoName}/commits`}>Commits</Link></th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>dhub.sol</td>
-                  <td>initial commit</td>
-                  <td>2 days ago</td>
-                </tr>
-                <tr>
-                  <td>main.js</td>
-                  <td>initial commit</td>
-                  <td>2 days ago</td>
-                </tr>
-                <tr>
-                  <td>README.md</td>
-                  <td>initial commit</td>
-                  <td>2 days ago</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className="readme-container">
-            <div className="readme-header">
-              <h3>README.md</h3>
-            </div>
-            <div className="readme-body">
-              <p>
-                This project is an implementation of a basic blockchain in
-                JavaScript.
-              </p>
-            </div>
-          </div>
-          <div>
-            <input
-              id="commit"
-              value={inputValue}
-              onChange={handleInputChange}
-              className="commit-massege"
-              type="text"
-              placeholder="Type your commit message"
-            />
-          </div>
-          <div {...getRootProps()} className="drag-drop-container">
-            <input {...getInputProps()} />
-            <button
-              onClick={handleSubmit}
-              style={{ opacity: inputValue.trim() ? 1 : 0.5 }}
-              disabled={!inputValue.trim()}
-            >
-              Select Files
-            </button>
-          </div>
+                  <tbody>
+                {path.map((path, index) => (
+              <tr key={index}>
+                <td>{path}</td>
+                <td>{commit}</td>
+                <td>2 days ago</td>
+              </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
-        <div className="repo-sidebar">
-          <div className="about">
-            <h3>About</h3>
+        <div className="readme-container">
+          <div className="readme-header">
+            <h3>README.md</h3>
+          </div>
+          <div className="readme-body">
             <p>
               This project is an implementation of a basic blockchain in
               JavaScript.
             </p>
           </div>
         </div>
+        <h2>Add New Commit</h2>
+        <div className="file-upload-container">
+          <div className="file-upload">
+            <div className="drag-drop-area" id="dropzone">
+              <span>Drag & Drop Files Here</span>
+              <input
+                type="file"
+                id="filepicker"
+                name="fileList"
+                webkitdirectory=""
+                directory=""
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+                ref={fileInputRef}
+
+              />
+              <div>
+                <button className='select-files' onClick={() => fileInputRef.current.click()}>Select Directory</button>
+              </div>
+            </div>
+            <div className="file-list" id="fileList">
+              <ul>
+                {selectedFiles.map((file, index) => (
+                  <li key={index}>
+                    <span>{file.webkitRelativePath}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="commit-section">
+            <input type="text" value={inputValue}
+              onChange={handleInputChange} id="commitMessage" placeholder="Type your commit message" />
+            <button onClick={handleSubmit} id="submitBtn" style={{ opacity: inputValue.trim() ? 1 : 0.5 }}
+              disabled={!inputValue.trim()} >Submit</button>
+          </div>
+        </div>
+
+      </div>
+      <div className="repo-sidebar">
+        <div className="about">
+          <h3>About</h3>
+          <p>
+            This project is an implementation of a basic blockchain in
+            JavaScript.
+          </p>
+        </div>
+
       </div>
     </div>
+    </div >
   );
 };
 
 export default Repo;
+
+// {/* <input
+// id="commit"
+// value={inputValue}
+// onChange={handleInputChange}
+// className="commit-massege"
+// type="text"
+// placeholder="Type your commit message"
+// /> }
+
+// <button onClick={handleSubmit}
+//               style={{ opacity: inputValue.trim() ? 1 : 0.5 }}
+//               disabled={!inputValue.trim()}>
+//               Submit
+//             </button>
