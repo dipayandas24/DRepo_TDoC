@@ -1,6 +1,4 @@
-import React, { useCallback , useState } from 'react';
-import { useStorageUpload } from '@thirdweb-dev/react';
-import { useDropzone } from 'react-dropzone';
+import React, {  useState } from 'react';
 import Navbar from '../../Components/Navbar/Navbar';
 import './Home.scss';
 import { useNavigate } from 'react-router-dom';
@@ -15,17 +13,17 @@ const Home = () => {
 
 
   const [profileName, setProfileName] = useState('');
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  
+  // const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  // const handleInputChange = (event) => {
+  //   setInputValue(event.target.value);
+  // };
 
-  const handleSubmit = () => {
-    // Perform actions for file upload
-    console.log("Your commit:", inputValue);
-  };
+  // const handleSubmit = () => {
+  //   // Perform actions for file upload
+  //   console.log("Your commit:", inputValue);
+  // };
 
   const handleSignIn = async () => {
     if (window.ethereum) {

@@ -16,8 +16,7 @@ export const contractABI = [
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -36,8 +35,26 @@ export const contractABI = [
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "profileNameToAddr",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -61,13 +78,12 @@ export const contractABI = [
         },
         {
           "internalType": "string",
-          "name": "ipfsCID",
+          "name": "ipfsURI",
           "type": "string"
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -86,8 +102,7 @@ export const contractABI = [
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -111,28 +126,7 @@ export const contractABI = [
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "profileName",
-          "type": "string"
-        }
-      ],
-      "name": "getAddressByProfileName",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -158,8 +152,20 @@ export const contractABI = [
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getProfileName",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     },
     {
       "inputs": [
@@ -191,8 +197,7 @@ export const contractABI = [
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -208,7 +213,7 @@ export const contractABI = [
         },
         {
           "internalType": "string",
-          "name": "ipfsCID",
+          "name": "ipfsURI",
           "type": "string"
         }
       ],
@@ -236,19 +241,18 @@ export const contractABI = [
             },
             {
               "internalType": "string",
-              "name": "ipfsCID",
+              "name": "ipfsURI",
               "type": "string"
             }
           ],
-          "internalType": "struct D_hub.Commit[]",
+          "internalType": "struct DRepo.Commit[]",
           "name": "",
           "type": "tuple[]"
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ]
 
-export const contractAddress = "0x2B736e5a8C9d3Dcafb9B0cBa0a79eF941839480E"
+export const contractAddress = "0x4A3980Fa16D3B3E10E9F5e64fab2EC0d921546FE"
