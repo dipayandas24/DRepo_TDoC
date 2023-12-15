@@ -32,7 +32,14 @@ contract DRepo {
 
     function authenticateUser() public view returns (bool) {
         return isRegistered[msg.sender];
+        
     }
+
+    function isOwner(string memory profileName) public view returns (bool) {
+        address userAddress = profileNameMap[profileName];
+        return userAddress == msg.sender;
+    }
+
 
     function getProfileName() public view returns (string memory) {
         return profileNameToAddr[msg.sender];
