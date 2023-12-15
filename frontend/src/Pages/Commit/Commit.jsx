@@ -1,40 +1,59 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./Commit.scss";
 import Navbar from "../../Components/Navbar/Navbar";
+import Web3 from "web3";
+import { useParams } from 'react-router-dom';
+import { contractABI, contractAddress } from '../../contractConfig.js';
 
-function Commit() {
+const CommitHistoryPage = () => {
+
   const [commits, setCommits] = useState([]);
+  const { profileName, repoName } = useParams();
+
+  const fetchCommits = async () => {
+    if (window.ethereum) {
+      const web3 = new Web3(window.ethereum);
+      const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+      try {
+        await window.eth_requestAccounts;
+        const accounts = await web3.eth.getAccounts();
+        const Commits = await contract.methods.getAllCommits(repoName).call({ from: accounts[0] });
+
+        
+        const reversedCommits = Commits.reverse();
+
+        setCommits(reversedCommits);
+
+      } catch (error) {
+        console.error('Error fetching commits from smart contract:', error);
+      }
+    }
+  }
 
   useEffect(() => {
-    fetchData();
+    fetchCommits();
   }, []);
-
-  const fetchData = async () => {
-    const response = await axios.get(
-      "https://api.github.com/repos/facebook/react/commits"
-    );
-    setCommits(response.data);
-  };
 
   return (
     <div className="commit-history">
       <Navbar />
-      <div className="commit">
-        
-        <div className="commit-list">
-        <h1>Commit History</h1>
+      <div className="commit-history-page">
+        <h1>Commits</h1>
+        <hr />
+        <ul className="commit-list">
           {commits.map((commit) => (
-            <div className="commit-item" key={commit.sha}>
-              <div className="commit-sha"><span className="detail">Commit ID:</span> {commit.sha}</div>
-              <div className="commit-message"><span className="detail">Commit message:</span> {commit.commit.message}</div>
-              <div className="commit-author"><span className="detail">Author:</span> {commit.commit.author.name}</div>
-            </div>
+            <li key={commit.id} className="commit-item">
+              <div className="commit-info">
+                <div className="commit-message">{commit.CommitMsg}</div>
+                <div className="profile-name"> {profileName} committed few time ago</div>
+              </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
 }
 
-export default Commit;
+export default CommitHistoryPage;

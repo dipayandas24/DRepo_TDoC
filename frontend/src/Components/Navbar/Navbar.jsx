@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link,useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 
 const Navbar = () => {
-  const [overviewVisible, setOverviewVisible] = useState(false);
-  const [repositoriesVisible, setRepositoriesVisible] = useState(false);
-  const location = useLocation();
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    setOverviewVisible(false);
-    setRepositoriesVisible(false);
-  }, [location]);
-
-  // const toggleOverview = () => {
-  //   setOverviewVisible(!overviewVisible);
-  //   setRepositoriesVisible(false);
-  // };
-
-  // const toggleRepositories = () => {
-  //   setRepositoriesVisible(!repositoriesVisible);
-  //   setOverviewVisible(false);
-  // };
-
-  const isUserPage = location.pathname === "/user";
+ const [profileName, setProfileName] = useState('');
+ const handleSearch = (event) => {
+  if (event.key === 'Enter') {
+    navigate(`/${profileName}`);
+  }
+};
 
   return (
     <div className="navbar-container">
@@ -31,24 +19,6 @@ const Navbar = () => {
           D<span className="navbar-subtitle">Repo</span>
         </Link>
 
-        {/* {isUserPage && (
-          <>
-            <div className="toggle-buttons">
-              <button className="overview" onClick={toggleOverview}>Overview</button>
-              <button className="repositories" onClick={toggleRepositories}>Repositories</button>
-            </div>
-
-            <div className="panels">
-              {overviewVisible && (
-                <div className="overview-panel">Overview Content</div>
-              )}
-              {repositoriesVisible && (
-                <div className="repositories-panel">Repositories Content</div>
-              )}
-            </div>
-          </>
-        )} */}
-
         <div className="search-bar">
           <input
             type="search"
@@ -56,6 +26,9 @@ const Navbar = () => {
             aria-label="Search"
             placeholder="Type / to search for user"
             className="search-field"
+            value={profileName}
+            onChange={(e) => setProfileName(e.target.value)}
+            onKeyUp={handleSearch}
           />
         </div>
       </div>

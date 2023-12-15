@@ -2,7 +2,7 @@
 
 .box {
   display: flex;
-  gap: 18rem;
+  gap: 10rem;
 }
 .user-content {
   display: flex;
@@ -33,6 +33,7 @@
   display: flex;
   align-items: flex-start;
   margin-right: 10px;
+  margin-bottom: 15px;
 }
 
 .reposearch-bar {

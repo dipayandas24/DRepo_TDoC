@@ -27,8 +27,9 @@
 
   h2{
     color: white;
-    font-size: 24px;
+    font-size: 30px;
     margin-bottom: 4px;
+    font-weight: 300;
   }
   
   .input-container {
@@ -39,8 +40,7 @@
   
   label {
     color: #27E5FF;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 22px;
     margin-bottom: 5px;
   }
   
@@ -48,8 +48,9 @@
     width: 90%;
     padding: 10px;
     font-size: 16px;
-    border: 2px solid $textSoft;
+    border: 2px solid #464d57;
     border-radius: 8px;
+    color: white;
   }
   
   .button-container {
