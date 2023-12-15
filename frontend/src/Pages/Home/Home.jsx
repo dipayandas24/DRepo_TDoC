@@ -4,9 +4,9 @@ import './Home.scss';
 import { useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import { contractABI, contractAddress } from '../../contractConfig.js';
-// import { contract } from 'web3/lib/commonjs/eth.exports';
 
-// console.log(contractAddress);
+
+
 const Home = () => {
 
   const navigate = useNavigate()
@@ -14,18 +14,9 @@ const Home = () => {
 
   const [profileName, setProfileName] = useState('');
   
-  // const [inputValue, setInputValue] = useState("");
 
-  // const handleInputChange = (event) => {
-  //   setInputValue(event.target.value);
-  // };
-
-  // const handleSubmit = () => {
-  //   // Perform actions for file upload
-  //   console.log("Your commit:", inputValue);
-  // };
-
-  const handleSignIn = async () => {
+  const handleSignIn = async (event) => {
+    event.preventDefault();
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(contractABI, contractAddress);
@@ -36,20 +27,22 @@ const Home = () => {
         
 
         const result = await contract.methods.authenticateUser().call({ from: accounts[0] });
-        
+        console.log(result);
 
         if(result){
           const profileName = await contract.methods.getProfileName().call({ from: accounts[0] });
           navigate(`/${profileName}`);
         }
         else{
-          console.log('User not registered');
+          alert('No User registered with this address!');
         }
+        
+        
       }
       catch (error) {
         console.error('Error registering user', error);
   }
-}
+    }
 }
 
 
@@ -91,9 +84,9 @@ const Home = () => {
               value={profileName}
               onChange={(e) => setProfileName(e.target.value)} />
           </div>
-          <button className="btn" onClick={registerUser}>Register</button>
+          <button className="btn"  onClick={registerUser} disabled = {!profileName.trim()}>Register</button>
           <div className="signin-text">Already Have an Account, 
-           <button className='sign-in' onClick={handleSignIn}>Sign In</button>
+           <a href='#' className='sign-in' onClick={handleSignIn}>Sign In</a>
           </div>
         </div>
         <div className="right-content">

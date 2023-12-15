@@ -106,7 +106,20 @@ img {
   background-color: mix($textNeon, $bg, 10%);
 }
 
+.btn[disabled] {
+  opacity: 0.5; 
+  cursor: not-allowed;
+}
+
+.btn:hover:not([disabled]) {
+  background-color: mix($textNeon, $bg, 10%);
+}
+
 .right-content {
   flex: 1 1;
   margin-right: 100px;
+}
+
+.sign-in{
+  background-color: $bg;
 }

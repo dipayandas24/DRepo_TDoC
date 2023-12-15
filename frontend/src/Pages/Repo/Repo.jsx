@@ -10,8 +10,9 @@ import { contractABI, contractAddress } from '../../contractConfig.js';
 
 const Repo = () => {
 
-
+  const [isProfileOwner, setProfileOwner] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -36,14 +37,18 @@ const Repo = () => {
         const accounts = await web3.eth.getAccounts();
         const commits = await contract.methods.getAllCommits(repoName).call({ from: accounts[0] });
 
+        
+        const isOwner = await contract.methods.isOwner(profileName).call({ from: accounts[0] });
+        setProfileOwner(isOwner);
+
         const latestCommit = commits.length > 0 ? commits[commits.length - 1] : null;
         setLastCommit(latestCommit.CommitMsg);
-        console.log(latestCommit.ipfsURI)
+        console.log(latestCommit.id)
 
         if (latestCommit) {
           const response = await fetch(latestCommit.ipfsURI)
           console.log(response)
-          const { data,fs } = await response.json();
+          const { data, fs } = await response.json();
           console.log(data);
 
           const formattedUrl = data.replace('ipfs://', 'https://ipfs.io/ipfs/');
@@ -57,7 +62,7 @@ const Repo = () => {
           });
           const uniquePaths = [...new Set(commitPaths)];
           console.log(Array.isArray(uniquePaths));
-          
+
           setPath(uniquePaths);
         }
 
@@ -94,7 +99,7 @@ const Repo = () => {
 
   useEffect(() => {
     fetchCommits();
-    console.log(typeof path)
+    
   }, []);
 
 
@@ -138,11 +143,16 @@ const Repo = () => {
       try {
         await window.eth_requestAccounts;
         const accounts = await web3.eth.getAccounts();
-        await contract.methods.commit(repoName, inputValue, data.url).send({ from: accounts[0] });
+        const result = await contract.methods.commit(repoName, inputValue, data.url).send({ from: accounts[0] });
+
+        if (result){
+        window.location.reload();
+        }
+
 
       }
       catch (error) {
-        console.error('Error adding commit', error);
+        alert('Error adding commit', error);
       }
     }
 
@@ -181,7 +191,7 @@ const Repo = () => {
               </button>
               {isDropdownOpen && (
                 <div className="download">
-                  <a href= {url} className="zip">
+                  <a href={url} className="zip">
                     Download ZIP
                   </a>
                   {/* Add more dropdown items if needed */}
@@ -195,98 +205,91 @@ const Repo = () => {
                 <tr>
                   <th>{profileName}</th>
                   <th></th>
-                  <th><Link to={`/${profileName}/${repoName}/commits`}>Commits</Link></th>
+                  <th>
+                    <Link
+                      to={{
+                        pathname: `/${profileName}/${repoName}/commits`}}
+                    >Commits</Link></th>
                 </tr>
               </thead>
-                  <tbody>
+              <tbody>
                 {path.map((path, index) => (
-              <tr key={index}>
-                <td>{path}</td>
-                <td>{commit}</td>
-                <td>2 days ago</td>
-              </tr>
+                  <tr key={index}>
+                    <td>{path}</td>
+                    <td>{commit}</td>
+                    <td>2 days ago</td>
+                  </tr>
                 ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="readme-container">
-          <div className="readme-header">
-            <h3>README.md</h3>
+              </tbody>
+            </table>
           </div>
-          <div className="readme-body">
+          <div className="readme-container">
+            <div className="readme-header">
+              <h3>README.md</h3>
+            </div>
+            <div className="readme-body">
+              <p>
+                This project is an implementation of a basic blockchain in
+                JavaScript.
+              </p>
+            </div>
+          </div>
+          {isProfileOwner && (
+            <div className="add-commit">
+              <h2>Add New Commit</h2>
+              <div className="file-upload-container">
+                <div className="file-upload">
+                  <div className="drag-drop-area" id="dropzone">
+                    <span>Drag & Drop Files Here</span>
+                    <input
+                      type="file"
+                      id="filepicker"
+                      name="fileList"
+                      webkitdirectory=""
+                      directory=""
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                      ref={fileInputRef}
+
+                    />
+                    <div>
+                      <button className='select-files' onClick={() => fileInputRef.current.click()}>Select Directory</button>
+                    </div>
+                  </div>
+                  <div className="file-list" id="fileList">
+                    <ul>
+                      {selectedFiles.map((file, index) => (
+                        <li key={index}>
+                          <span>{file.webkitRelativePath}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="commit-section">
+                  <input type="text" value={inputValue}
+                    onChange={handleInputChange} id="commitMessage" placeholder="Type your commit message" />
+                  <button onClick={handleSubmit} id="submitBtn" 
+                    disabled={selectedFiles.length===0 ||!inputValue.trim()} >Submit</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="repo-sidebar">
+          <div className="about">
+            <h3>About</h3>
             <p>
               This project is an implementation of a basic blockchain in
               JavaScript.
             </p>
           </div>
-        </div>
-        <h2>Add New Commit</h2>
-        <div className="file-upload-container">
-          <div className="file-upload">
-            <div className="drag-drop-area" id="dropzone">
-              <span>Drag & Drop Files Here</span>
-              <input
-                type="file"
-                id="filepicker"
-                name="fileList"
-                webkitdirectory=""
-                directory=""
-                style={{ display: 'none' }}
-                onChange={handleFileChange}
-                ref={fileInputRef}
 
-              />
-              <div>
-                <button className='select-files' onClick={() => fileInputRef.current.click()}>Select Directory</button>
-              </div>
-            </div>
-            <div className="file-list" id="fileList">
-              <ul>
-                {selectedFiles.map((file, index) => (
-                  <li key={index}>
-                    <span>{file.webkitRelativePath}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="commit-section">
-            <input type="text" value={inputValue}
-              onChange={handleInputChange} id="commitMessage" placeholder="Type your commit message" />
-            <button onClick={handleSubmit} id="submitBtn" style={{ opacity: inputValue.trim() ? 1 : 0.5 }}
-              disabled={!inputValue.trim()} >Submit</button>
-          </div>
         </div>
-
       </div>
-      <div className="repo-sidebar">
-        <div className="about">
-          <h3>About</h3>
-          <p>
-            This project is an implementation of a basic blockchain in
-            JavaScript.
-          </p>
-        </div>
-
-      </div>
-    </div>
     </div >
   );
 };
 
 export default Repo;
 
-// {/* <input
-// id="commit"
-// value={inputValue}
-// onChange={handleInputChange}
-// className="commit-massege"
-// type="text"
-// placeholder="Type your commit message"
-// /> }
-
-// <button onClick={handleSubmit}
-//               style={{ opacity: inputValue.trim() ? 1 : 0.5 }}
-//               disabled={!inputValue.trim()}>
-//               Submit
-//             </button>

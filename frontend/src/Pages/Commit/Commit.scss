@@ -1,56 +1,55 @@
-@import "../../style.scss";
 
-.commit {
-  padding-top: 5%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+/* CommitHistoryPage.css */
+
+.commit-history-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+
+h1 {
+  color: aliceblue;
+  font-weight: 300;
+  margin: 10px 0;
+}
+hr {
+  border: 1px solid #485865;
 }
 
-.detail{
-    color: $textNeon;
-    background: $bgSoft;
 }
 
 .commit-list {
-  width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 16px;
-  box-sizing: border-box;
   list-style-type: none;
-}
-
-.commit-list h1{
-    color: #fff;
+  padding: 0;
 }
 
 .commit-item {
-  display: flex;
-  flex-direction: column;
-  background-color: $bgSoft;
-  border-radius: 4px;
-  padding: 16px;
+  border: 1px solid #485865;
+  border-radius: 6px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.commit-sha {
-  font-size: 14px;
-  background-color: $bgSoft;
-  color: #ffffff;
-  margin-bottom: 8px;
+.commit-info {
+  flex-grow: 1;
 }
 
 .commit-message {
-  font-size: 16px;
-  background-color: $bgSoft;
-  color: #ffffff;
+  color: aliceblue;
+  font-size: 1.75rem;
+  
   margin-bottom: 8px;
 }
 
-.commit-author {
+
+.profile-name {
   font-size: 14px;
-  background-color: $bgSoft;
-  color: #fff;
+  color: #919499; 
+  font-weight: 300;
+  padding-top: 5px;
 }
+
+
+

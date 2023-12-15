@@ -21,6 +21,11 @@ $font: 'Poppins', sans-serif;
   // padding: 0;
 }
 
+.search-field{
+  color: aliceblue;
+  font-size: 1.25rem;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -38,6 +43,7 @@ $font: 'Poppins', sans-serif;
   font-family: $font;
   background-color: $bgSoft;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .navbar-title { 

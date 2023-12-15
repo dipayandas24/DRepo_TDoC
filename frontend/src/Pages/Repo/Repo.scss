@@ -200,6 +200,7 @@ option {
   align-items: center;
   margin-bottom: 10px;
   font-family: $font;
+  width: 60%;
   font-size: 32px;
   color: $textBasic;
 }
@@ -217,6 +218,7 @@ option {
   border-radius: 20px;
   font-family: $font;
   font-size: 20px;
+  margin-top: 15px;
 }
 
 .branch-dropdown {
@@ -228,6 +230,9 @@ option {
 }
 
 .dropdown {
+  width: 60px;
+  height: 35px;
+  border-radius: 8px;
   font-family: $font;
   font-weight: 500;
   background: #fff;
@@ -317,4 +322,13 @@ option {
   padding-right: 200px;
   font-family: $font;
   margin-left: 0;
+}
+
+#submitBtn[disabled] {
+  opacity: 0.5; 
+  cursor: not-allowed;
+}
+
+#submitBtn:hover:not([disabled]) {
+  background-color: mix($textNeon, $bg, 10%);
 }

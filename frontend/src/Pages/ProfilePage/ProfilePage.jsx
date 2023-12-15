@@ -12,6 +12,7 @@ const ProfilePage = () => {
   const { profileName } = useParams();
   const [isModalOpen, setModalOpen] = useState(false);
   const [repositories, setRepositories] = useState([]);
+  const [isProfileOwner, setProfileOwner] = useState(false);
 
   const fetchRepositories = async () => {
     if (window.ethereum) {
@@ -25,6 +26,10 @@ const ProfilePage = () => {
         const result = await contract.methods
           .getAllRepositories(profileName)
           .call({ from: accounts[0] });
+          const isOwner = await contract.methods.isOwner(profileName).call({ from: accounts[0] });
+          setProfileOwner(isOwner);
+          
+          
         console.log(result);
         setRepositories(result);
       } catch (error) {
@@ -52,11 +57,13 @@ const ProfilePage = () => {
                   className="reposearch-bar"
                 />
               </div>
+              {isProfileOwner && (
               <div>
                 <button className="button" onClick={() => setModalOpen(true)}>
                   New
                 </button>
               </div>
+              )}
             </div>
             <div className="repo-card-container">
               {repositories.map((repoName, index) => (
