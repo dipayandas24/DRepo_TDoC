@@ -194,7 +194,6 @@ const Repo = () => {
                   <a href={url} className="zip">
                     Download ZIP
                   </a>
-                  {/* Add more dropdown items if needed */}
                 </div>
               )}
             </div>

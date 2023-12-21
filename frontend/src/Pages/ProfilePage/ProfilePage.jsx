@@ -18,16 +18,18 @@ const ProfilePage = () => {
     if (window.ethereum) {
       const web3 = new Web3(window.ethereum);
       const contract = new web3.eth.Contract(contractABI, contractAddress);
-
+      
       try {
         await window.eth_requestAccounts;
         const accounts = await web3.eth.getAccounts();
 
+        const isOwner = await contract.methods.isOwner(profileName).call({ from: accounts[0] });
+        console.log(isOwner);
+        setProfileOwner(isOwner);
+
         const result = await contract.methods
           .getAllRepositories(profileName)
           .call({ from: accounts[0] });
-          const isOwner = await contract.methods.isOwner(profileName).call({ from: accounts[0] });
-          setProfileOwner(isOwner);
           
           
         console.log(result);
@@ -59,7 +61,7 @@ const ProfilePage = () => {
               </div>
               {isProfileOwner && (
               <div>
-                <button className="button" onClick={() => setModalOpen(true)}>
+                <button className="button-name" onClick={() => setModalOpen(true)}>
                   New
                 </button>
               </div>

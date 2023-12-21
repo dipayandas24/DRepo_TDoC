@@ -5,7 +5,6 @@ pragma solidity >=0.7.0 <0.9.0;
 contract DRepo {
     mapping(address => bool) public isRegistered;
     mapping(string => address) public profileNameMap;
-    mapping(string => address) public projectNameToAddress;
     mapping(address => string) public profileNameToAddr;
 
     struct Commit {
@@ -19,6 +18,7 @@ contract DRepo {
 
     function registerUser(string memory profileName) public {
         require(!isRegistered[msg.sender], "User already registered");
+
         require(
             bytes(profileName).length > 0,
             "Profile name must not be empty"
@@ -51,7 +51,7 @@ contract DRepo {
             "Project name must not be empty"
         );
         userProjects[msg.sender].push(project_name);
-        projectNameToAddress[project_name] = msg.sender;
+        
     }
 
     function getAllRepositories(string memory profilename)
@@ -69,7 +69,7 @@ contract DRepo {
         string memory project_name,
         string memory commitMsg,
         string memory ipfsURI
-    ) public projectOwner(project_name) {
+    ) public  {
         projectCommits[project_name].push(Commit(commitMsg, ipfsURI));
     }
 
@@ -80,15 +80,5 @@ contract DRepo {
     {
         return projectCommits[project_name];
     }
-
-    modifier projectOwner(string memory project_name) {
-        address userAddress = projectNameToAddress[project_name];
-        
-        require(
-            userAddress == msg.sender,
-            "Only the project owner can perform this action"
-        );
-        _;
-        
-    }
+    
 }
