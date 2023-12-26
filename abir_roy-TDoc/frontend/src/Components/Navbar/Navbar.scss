@@ -1,0 +1,83 @@
+$bgSoft: #414666;
+$bg: #27283D;
+$navbar-height: 140px;
+$navbar-padding: 20px;
+$navbar-max-width: 1440px;
+$search-max-width: 660px;
+$textBasic: #FFFFFF;
+$textNeon: #27E5FF;
+$font: 'Poppins', sans-serif;
+
+.navbar-container {
+  background-color: $bgSoft;
+  height: $navbar-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $navbar-padding;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: $bgSoft;
+//   align-items: center; 
+  width: 100%;
+  max-width: $navbar-max-width;
+  margin: 0 auto;
+  margin-left: 60px;
+}
+
+.navbar-title,
+.navbar-subtitle {
+  font-size: 40px;
+  font-family: $font;
+  background-color: $bgSoft;
+  font-weight: bold;
+}
+
+.navbar-title { 
+  color: $textNeon;
+  background-color: $bgSoft;
+}
+
+.navbar-subtitle {
+  color: $textBasic;
+  background-color: $bgSoft;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  color: $textBasic;
+  margin-right: -150px;
+  background-color: $bgSoft;
+}
+
+.search-field {
+  width: 660px;
+  height: 60px;
+  padding: 8px;
+  padding-left: 20px;
+  border-radius: 20px;
+  background-color: $bg;
+  border: 2px solid $textNeon;
+  font-family: $font;
+  font-weight: 20px;;
+}
+
+.toggle-buttons{
+  background: none;
+  align-items: baseline;
+}
+
+.overview,
+.repositories{
+  background: none;
+  align-items: baseline;
+}
+
+.overview:hover, .repositories:hover{
+  background: none;
+  text-decoration: underline $textNeon 4px;
+}
