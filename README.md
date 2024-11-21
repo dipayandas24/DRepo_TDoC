@@ -10,7 +10,7 @@ DRepo is a decentralized web-based code storage platform made with Ethereum Bloc
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/drepo.git
+   git clone https://github.com/dipayandas24/DRepo_TDoC.git
    cd DRepo_TDoC
    ```
 2. Install dependencies:
